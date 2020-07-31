@@ -33,6 +33,12 @@ class Interpreter:
             return Token(EOF, None)
 
         current_char = text[self.pos]
+        while current_char.isspace():
+            self.pos += 1
+            try:
+                current_char = text[self.pos]
+            except IndexError:
+                current_char = EOF
 
         if current_char == '+':
             token = Token(PLUS, current_char)
