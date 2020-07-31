@@ -3,7 +3,8 @@
 # Token types
 # EOF token is used to indicate that
 # there is no more input left for lexical analysis
-INTEGER, PLUS, EOF = 'INTEGER', 'PLUS', 'EOF'
+INTEGER, PLUS, MINUS, EOF = 'INTEGER', 'PLUS', 'MINUS', 'EOF'
+OP_MAP = {'+': PLUS, '-': MINUS}
 
 
 class Token:
@@ -44,6 +45,11 @@ class Interpreter:
             token = Token(PLUS, current_char)
             self.pos += 1
             return token
+        
+        if current_char == '-':
+            token = Token(MINUS, current_char)
+            self.pos += 1
+            return token
 
         digit_sequence = ""
         while current_char.isdigit():
@@ -72,12 +78,15 @@ class Interpreter:
         self.eat(INTEGER)
 
         op = self.current_token
-        self.eat(PLUS)
+        self.eat(op.type)
 
         right = self.current_token
         self.eat(INTEGER)
 
-        result = left.value + right.value
+        if op.type == PLUS:
+            result = left.value + right.value
+        else:
+            result = left.value - right.value
         return result
 
 
