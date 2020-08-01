@@ -9,7 +9,7 @@ class Lexer:
         self.current_char = self.text[self.pos]
 
     def error(self):
-        raise Exception("Lexer error")
+        raise Exception("Invalid character")
 
     def advance(self):
         self.pos += 1
@@ -46,7 +46,3 @@ class Lexer:
             self.error()
 
         return EofToken()
-
-    def reset(self):
-        self.pos = 0
-        self.current_char = self.text[self.pos]

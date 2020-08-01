@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 from interpreter import Interpreter
+from lexer import Lexer
 
 def main():
-    interpreter = Interpreter()
     while True:
         try:
             text = input('calc>')
@@ -11,6 +11,8 @@ def main():
             break
         if not text:
             continue
+        lexer = Lexer(text)
+        interpreter = Interpreter(lexer)
         result = interpreter.expr(text)
         print(result)
 
