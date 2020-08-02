@@ -1,35 +1,27 @@
+from dataclasses import dataclass
+from typing import Any
+
 # Token types
 # EOF token is used to indicate that
 # there is no more input left for lexical analysis
 
 INTEGER = 'INTEGER'
-
 EOF = 'EOF'
-
 PLUS = 'PLUS'
 MINUS = 'MINUS'
 MUL = 'MUL'
 DIV = 'DIV'
+LPAREN = 'LPAREN'
+RPAREN = 'RPAREN'
 
-LPAREN = '('
-RPAREN = ')'
-
-OPERATIONS = [PLUS, MINUS, MUL, DIV]
 OPERATORS = {'+': PLUS, '-': MINUS, '*': MUL, '/': DIV}
+PARENS = {'(': LPAREN, ')': RPAREN}
 
-PARENS = [LPAREN, RPAREN]
 
-
+@dataclass
 class Token:
-    def __init__(self, token_type, value):
-        self.type = token_type
-        self.value = value
-
-    def __str__(self):
-        return f'Token({self.type}, {self.value})'
-
-    def __repr__(self):
-        return self.__str__()
+    type: str
+    value: Any
 
 
 class IntegerToken(Token):
@@ -40,6 +32,7 @@ class IntegerToken(Token):
 
 class OperatorToken(Token):
     def __init__(self, value):
+        assert value in OPERATORS
         super().__init__(OPERATORS[value], value)
 
 
@@ -50,4 +43,5 @@ class EofToken(Token):
 
 class ParenToken(Token):
     def __init__(self, value):
-        super().__init__(value, value)
+        assert value in PARENS
+        super().__init__(PARENS[value], value)
