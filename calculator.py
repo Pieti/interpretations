@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from interpreter import Interpreter
-from lexer import Lexer
+from _interpreter import Interpreter
+from _lexer import Lexer
 
 def main():
     while True:

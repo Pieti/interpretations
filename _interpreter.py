@@ -1,4 +1,4 @@
-from token import INTEGER, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN
+from _token import INTEGER, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN
 
 
 class Interpreter:
