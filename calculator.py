@@ -13,7 +13,7 @@ def main():
             continue
         lexer = Lexer(text)
         interpreter = Interpreter(lexer)
-        result = interpreter.expr(text)
+        result = interpreter.expr()
         print(result)
 
 if __name__ == '__main__':

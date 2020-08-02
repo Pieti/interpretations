@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from token import IntegerToken, EofToken, OperatorToken, OPERATORS
+from token import IntegerToken, EofToken, OperatorToken, ParenToken, OPERATORS, PARENS
 
 class Lexer:
     def __init__(self, text):
@@ -42,6 +42,12 @@ class Lexer:
                 operator = self.current_char
                 self.advance()
                 return OperatorToken(operator)
+
+            if self.current_char in PARENS:
+                paren = self.current_char
+                self.advance()
+                return ParenToken(paren)
+
 
             self.error()
 

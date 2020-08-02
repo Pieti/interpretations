@@ -1,4 +1,4 @@
-from token import INTEGER, OPERATOR, EOF, PLUS, MINUS, MUL, DIV
+from token import INTEGER, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN
 
 
 class Interpreter:
@@ -17,34 +17,42 @@ class Interpreter:
 
     def factor(self):
         token = self.current_token
-        self.eat(INTEGER)
-        return token.value
+        if token.type == INTEGER:
+            self.eat(INTEGER)
+            return token.value
+        elif token.type == LPAREN:
+            self.eat(LPAREN)
+            result = self.expr()
+            self.eat(RPAREN)
+            return result
 
     def term(self):
         result = self.factor()
-        while self.current_token.type == OPERATOR and self.current_token.value in (MUL, DIV):
+        while self.current_token.type in (MUL, DIV):
             token = self.current_token
-            self.eat(OPERATOR)
-            if token.value == MUL:
+            if token.type == MUL:
+                self.eat(MUL)
                 result = result * self.factor()
-            elif token.value == DIV:
+            elif token.type == DIV:
+                self.eat(DIV)
                 result = int(result / self.factor())
         return result
 
-    def expr(self, text):
+    def expr(self):
         """Aritchmetic expression parser / interpreter.
 
         expr    : term ((PLUS | MINUS) term)*
         term    : factor ((MUL | DIV) factor)*
-        factor  : INTEGER
+        factor  : INTEGER | LPAREN expr RPAREN
         """
         result = self.term()
-        while self.current_token.type == OPERATOR and self.current_token.value in (PLUS, MINUS):
+        while self.current_token.type in (PLUS, MINUS):
             token = self.current_token
-            self.eat(OPERATOR)
-            if token.value == PLUS:
+            if token.type == PLUS:
+                self.eat(PLUS)
                 result = result + self.term()
-            elif token.value == MINUS:
+            elif token.type == MINUS:
+                self.eat(MINUS)
                 result = result - self.term()
 
         return result

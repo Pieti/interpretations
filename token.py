@@ -3,14 +3,21 @@
 # there is no more input left for lexical analysis
 
 INTEGER = 'INTEGER'
+
 EOF = 'EOF'
-OPERATOR = 'OPERATOR'
+
 PLUS = 'PLUS'
 MINUS = 'MINUS'
 MUL = 'MUL'
 DIV = 'DIV'
 
+LPAREN = '('
+RPAREN = ')'
+
+OPERATIONS = [PLUS, MINUS, MUL, DIV]
 OPERATORS = {'+': PLUS, '-': MINUS, '*': MUL, '/': DIV}
+
+PARENS = [LPAREN, RPAREN]
 
 
 class Token:
@@ -33,9 +40,14 @@ class IntegerToken(Token):
 
 class OperatorToken(Token):
     def __init__(self, value):
-        super().__init__(OPERATOR, OPERATORS[value])
+        super().__init__(OPERATORS[value], value)
 
 
 class EofToken(Token):
     def __init__(self):
         super().__init__(EOF, None)
+
+
+class ParenToken(Token):
+    def __init__(self, value):
+        super().__init__(value, value)
