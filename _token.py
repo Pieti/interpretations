@@ -36,12 +36,12 @@ class OperatorToken(Token):
         super().__init__(OPERATORS[value], value)
 
 
-class EofToken(Token):
-    def __init__(self):
-        super().__init__(EOF, None)
-
-
 class ParenToken(Token):
     def __init__(self, value):
         assert value in PARENS
         super().__init__(PARENS[value], value)
+
+
+class EofToken(Token):
+    def __init__(self):
+        super().__init__(EOF, None)
