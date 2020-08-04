@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from _token import IntegerToken, EofToken, OperatorToken, ParenToken, OPERATORS, PARENS
+from ._token import IntegerToken, EofToken, OperatorToken, ParenToken, OPERATORS, PARENS
 
 class Lexer:
     def __init__(self, text):

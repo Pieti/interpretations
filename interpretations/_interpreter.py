@@ -1,4 +1,4 @@
-from _token import PLUS, MINUS, MUL, DIV
+from ._token import PLUS, MINUS, MUL, DIV
 
 
 class NodeVisitor:
