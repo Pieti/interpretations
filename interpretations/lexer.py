@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 
-from ._token import IntegerToken, EofToken, OperatorToken, ParenToken, OPERATORS, PARENS
+from .token import Token, IntegerToken, EofToken, OperatorToken, ParenToken, BeginToken, EndToken, AssignToken, SemiToken, DotToken
+from .token import OPERATORS, PARENS, ID
+
+RESERVED_KEYWORDS = {
+    'BEGIN': BeginToken(),
+    'END': EndToken()
+}
 
 class Lexer:
     def __init__(self, text):
@@ -18,6 +24,13 @@ class Lexer:
         else:
             self.current_char = self.text[self.pos]
 
+    def peek(self):
+        peek_pos = self.pos + 1
+        if peek_pos > len(self.text) - 1:
+            return None
+        else:
+            return self.text[peek_pos]
+
     def skip_whitespace(self):
         while self.current_char is not None and self.current_char.isspace():
             self.advance()
@@ -28,6 +41,15 @@ class Lexer:
             result += self.current_char
             self.advance()
         return int(result)
+
+    def _id(self):
+        result = ''
+        while self.current_char is not None and self.current_char.isalnum():
+            result += self.current_char
+            self.advance()
+
+        token = RESERVED_KEYWORDS.get(result, Token(ID, result))
+        return token
 
     def get_next_token(self):
         while self.current_char is not None:
@@ -48,6 +70,21 @@ class Lexer:
                 self.advance()
                 return ParenToken(paren)
 
+            if self.current_char.isalpha():
+                return self._id()
+
+            if self.current_char == ':' and self.peek() == '=':
+                self.advance()
+                self.advance()
+                return AssignToken()
+
+            if self.current_char == ';':
+                self.advance()
+                return SemiToken()
+
+            if self.current_char == '.':
+                self.advance()
+                return DotToken()
 
             self.error()
 

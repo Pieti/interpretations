@@ -13,6 +13,12 @@ MUL = 'MUL'
 DIV = 'DIV'
 LPAREN = 'LPAREN'
 RPAREN = 'RPAREN'
+BEGIN = 'BEGIN'
+END = 'END'
+DOT = '.'
+ASSIGN = ':='
+SEMI = ';'
+ID = 'ID'
 
 OPERATORS = {'+': PLUS, '-': MINUS, '*': MUL, '/': DIV}
 PARENS = {'(': LPAREN, ')': RPAREN}
@@ -45,3 +51,33 @@ class ParenToken(Token):
 class EofToken(Token):
     def __init__(self):
         super().__init__(EOF, None)
+
+
+class BeginToken(Token):
+    def __init__(self):
+        super().__init__(BEGIN, BEGIN)
+
+
+class EndToken(Token):
+    def __init__(self):
+        super().__init__(END, END)
+
+
+class DotToken(Token):
+    def __init__(self):
+        super().__init__(DOT, DOT)
+
+
+class AssignToken(Token):
+    def __init__(self):
+        super().__init__(ASSIGN, ASSIGN)
+
+
+class SemiToken(Token):
+    def __init__(self):
+        super().__init__(SEMI, SEMI)
+
+
+class IdToken(Token):
+    def __init__(self, value):
+        super().__init__(ID, value)
