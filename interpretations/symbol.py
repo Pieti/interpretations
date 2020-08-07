@@ -58,6 +58,7 @@ class SymbolTableBuilder(NodeVisitor):
     def visit_Block(self, node):
         for declaration in node.declarations:
             self.visit(declaration)
+        self.visit(node.compound_statement)
 
     def visit_Program(self, node):
         self.visit(node.block)
