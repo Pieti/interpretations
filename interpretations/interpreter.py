@@ -24,8 +24,10 @@ class Interpreter(NodeVisitor):
             return self.visit(node.left) - self.visit(node.right)
         elif node.op.type == tokens.MUL:
             return self.visit(node.left) * self.visit(node.right)
-        elif node.op.type == tokens.DIV:
-            return self.visit(node.left) / self.visit(node.right)
+        elif node.op.type == tokens.INTEGER_DIV:
+            return self.visit(node.left) // self.visit(node.right)
+        elif node.op.type == tokens.FLOAT_DIV:
+            return float(self.visit(node.left)) / float(self.visit(node.right))
 
     def visit_Num(self, node):
         return node.value
@@ -55,6 +57,22 @@ class Interpreter(NodeVisitor):
             raise NameError(repr(var_name))
         else:
             return val
+
+    def visit_Program(self, node):
+        self.visit(node.block)
+
+    def visit_Block(self, node):
+        for declaration in node.declarations:
+            self.visit(declaration)
+        self.visit(node.compound_statement)
+
+    def visit_VarDecl(self, node):
+        # Do nothing
+        pass
+
+    def visit_Type(self, node):
+        # Do nothing
+        pass
 
     def interpret(self):
         tree = self.parser.parse()

@@ -3,6 +3,11 @@
 from interpretations import tokens
 
 RESERVED_KEYWORDS = {
+    'PROGRAM': tokens.ProgramToken(),
+    'VAR': tokens.VarToken(),
+    'DIV': tokens.OperatorToken(tokens.DIV),
+    'INTEGER': tokens.IntegerToken(),
+    'REAL': tokens.RealToken(),
     'BEGIN': tokens.BeginToken(),
     'END': tokens.EndToken()
 }
@@ -34,12 +39,33 @@ class Lexer:
         while self.current_char is not None and self.current_char.isspace():
             self.advance()
 
-    def integer(self):
+    def skip_comment(self):
+        while self.current_char != '}':
+            self.advance()
+        self.advance()    # the closing curly brace
+
+    def number(self):
         result = ''
         while self.current_char is not None and self.current_char.isdigit():
             result += self.current_char
             self.advance()
-        return int(result)
+
+        if self.current_char == '.':
+            result += self.current_char
+            self.advance()
+
+            while (
+                self.current_char is not None and
+                self.current_char.isdigit()
+            ):
+                result += self.current_char
+                self.advance()
+
+            token = tokens.RealConstToken(result)
+        else:
+            token = tokens.IntConstToken(result)
+
+        return token
 
     def _id(self):
         result = ''
@@ -56,8 +82,32 @@ class Lexer:
                 self.skip_whitespace()
                 continue
 
+            if self.current_char == '{':
+                self.advance()
+                self.skip_comment()
+                continue
+            if self.current_char.isalpha():
+                return self._id()
+
             if self.current_char.isdigit():
-                return tokens.IntegerToken(self.integer())
+                return self.number()
+
+            if self.current_char == ':' and self.peek() == '=':
+                self.advance()
+                self.advance()
+                return tokens.AssignToken()
+
+            if self.current_char == ';':
+                self.advance()
+                return tokens.SemiToken()
+
+            if self.current_char == ':':
+                self.advance()
+                return tokens.ColonToken()
+
+            if self.current_char == ',':
+                self.advance()
+                return tokens.CommaToken()
 
             if self.current_char in tokens.OPERATORS:
                 operator = self.current_char
@@ -68,18 +118,6 @@ class Lexer:
                 paren = self.current_char
                 self.advance()
                 return tokens.ParenToken(paren)
-
-            if self.current_char.isalpha():
-                return self._id()
-
-            if self.current_char == ':' and self.peek() == '=':
-                self.advance()
-                self.advance()
-                return tokens.AssignToken()
-
-            if self.current_char == ';':
-                self.advance()
-                return tokens.SemiToken()
 
             if self.current_char == '.':
                 self.advance()
