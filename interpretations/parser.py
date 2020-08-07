@@ -70,6 +70,12 @@ class Type(AST):
         self.value = token.value
 
 
+class ProcedureDecl(AST):
+    def __init__(self, proc_name, block_node):
+        self.proc_name = proc_name
+        self.block_node = block_node
+
+
 class Parser:
     def __init__(self, lexer):
         self.lexer = lexer
@@ -153,15 +159,28 @@ class Parser:
 
     def declarations(self):
         """declarations : VAR (variable_declaration SEMI)+
+                        | (PROCEDURE ID SEMI block SEMI)*
                         | empty
         """
         declarations = []
+
         if self.current_token.type == tokens.VAR:
             self.eat(tokens.VAR)
             while self.current_token.type == tokens.ID:
                 var_decl = self.variable_declaration()
                 declarations.extend(var_decl)
                 self.eat(tokens.SEMI)
+
+        while self.current_token.type == tokens.PROCEDURE:
+            self.eat(tokens.PROCEDURE)
+            proc_name = self.current_token.value
+            self.eat(tokens.ID)
+            self.eat(tokens.SEMI)
+            block_node = self.block()
+            proc_decl = ProcedureDecl(proc_name, block_node)
+            declarations.append(proc_decl)
+            self.eat(tokens.SEMI)
+
         return declarations
 
     def variable_declaration(self):

@@ -74,6 +74,9 @@ class Interpreter(NodeVisitor):
         # Do nothing
         pass
 
+    def visit_ProcedureDecl(self, node):
+        pass
+
     def interpret(self):
         tree = self.parser.parse()
         return self.visit(tree)

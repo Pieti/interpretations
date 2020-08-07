@@ -29,6 +29,7 @@ REAL_CONST = 'REAL_CONST'
 COLON = 'COLON'
 COMMA = 'COMMA'
 FLOAT_DIV = 'FLOAT_DIV'
+PROCEDURE = 'PROCEDURE'
 
 OPERATORS = {'+': PLUS, '-': MINUS, '*': MUL, DIV: INTEGER_DIV, '/': FLOAT_DIV}
 PARENS = {'(': LPAREN, ')': RPAREN}
@@ -130,3 +131,8 @@ class ColonToken(Token):
 class CommaToken(Token):
     def __init__(self):
         super().__init__(COMMA, ',')
+
+
+class ProcedureToken(Token):
+    def __init__(self):
+        super().__init__(PROCEDURE, PROCEDURE)

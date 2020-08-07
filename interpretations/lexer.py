@@ -9,7 +9,8 @@ RESERVED_KEYWORDS = {
     'INTEGER': tokens.IntegerToken(),
     'REAL': tokens.RealToken(),
     'BEGIN': tokens.BeginToken(),
-    'END': tokens.EndToken()
+    'END': tokens.EndToken(),
+    'PROCEDURE': tokens.ProcedureToken()
 }
 
 class Lexer:
