@@ -1,4 +1,4 @@
-from .token import PLUS, MINUS, MUL, DIV
+from interpretations import tokens
 
 
 class NodeVisitor:
@@ -18,13 +18,13 @@ class Interpreter(NodeVisitor):
         self.parser = parser
 
     def visit_BinOp(self, node):
-        if node.op.type == PLUS:
+        if node.op.type == tokens.PLUS:
             return self.visit(node.left) + self.visit(node.right)
-        elif node.op.type == MINUS:
+        elif node.op.type == tokens.MINUS:
             return self.visit(node.left) - self.visit(node.right)
-        elif node.op.type == MUL:
+        elif node.op.type == tokens.MUL:
             return self.visit(node.left) * self.visit(node.right)
-        elif node.op.type == DIV:
+        elif node.op.type == tokens.DIV:
             return self.visit(node.left) / self.visit(node.right)
 
     def visit_Num(self, node):
@@ -32,9 +32,9 @@ class Interpreter(NodeVisitor):
 
     def visit_UnaryOp(self, node):
         op = node.op.type
-        if op == PLUS:
+        if op == tokens.PLUS:
             return +self.visit(node.expr)
-        elif op == MINUS:
+        elif op == tokens.MINUS:
             return -self.visit(node.expr)
 
     def visit_Compound(self, node):

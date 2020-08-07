@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 
-from .token import Token, IntegerToken, EofToken, OperatorToken, ParenToken, BeginToken, EndToken, AssignToken, SemiToken, DotToken
-from .token import OPERATORS, PARENS, ID
+from interpretations import tokens
 
 RESERVED_KEYWORDS = {
-    'BEGIN': BeginToken(),
-    'END': EndToken()
+    'BEGIN': tokens.BeginToken(),
+    'END': tokens.EndToken()
 }
 
 class Lexer:
@@ -48,7 +47,7 @@ class Lexer:
             result += self.current_char
             self.advance()
 
-        token = RESERVED_KEYWORDS.get(result, Token(ID, result))
+        token = RESERVED_KEYWORDS.get(result, tokens.Token(tokens.ID, result))
         return token
 
     def get_next_token(self):
@@ -58,17 +57,17 @@ class Lexer:
                 continue
 
             if self.current_char.isdigit():
-                return IntegerToken(self.integer())
+                return tokens.IntegerToken(self.integer())
 
-            if self.current_char in OPERATORS:
+            if self.current_char in tokens.OPERATORS:
                 operator = self.current_char
                 self.advance()
-                return OperatorToken(operator)
+                return tokens.OperatorToken(operator)
 
-            if self.current_char in PARENS:
+            if self.current_char in tokens.PARENS:
                 paren = self.current_char
                 self.advance()
-                return ParenToken(paren)
+                return tokens.ParenToken(paren)
 
             if self.current_char.isalpha():
                 return self._id()
@@ -76,16 +75,16 @@ class Lexer:
             if self.current_char == ':' and self.peek() == '=':
                 self.advance()
                 self.advance()
-                return AssignToken()
+                return tokens.AssignToken()
 
             if self.current_char == ';':
                 self.advance()
-                return SemiToken()
+                return tokens.SemiToken()
 
             if self.current_char == '.':
                 self.advance()
-                return DotToken()
+                return tokens.DotToken()
 
             self.error()
 
-        return EofToken()
+        return tokens.EofToken()
