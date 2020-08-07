@@ -3,21 +3,24 @@
 from interpretations.interpreter import Interpreter
 from interpretations.lexer import Lexer
 from interpretations.parser import Parser
+from interpretations.symbol import SymbolTableBuilder, BuiltinTypeSymbol, VarSymbol
 
 text = """
-PROGRAM Part10AST;
+PROGRAM myprog;
 VAR
-   a, b : INTEGER;
-   y    : REAL;
+    number : INTEGER;
+    a, b   : INTEGER;
+    y      : REAL;
 
-BEGIN {Part10AST}
-   a := 2;
-   b := 10 * a + 10 * a DIV 4;
-   y := 20 / 7 + 3.14;
-END.  {Part10AST}
+BEGIN {myprog}
+    number := 2;
+    a := number;
+    b := 10 * a + 10 * number DIV 4;
+    y := 20 / 7 + 3.14
+END. {myprog}
 """
 
-def test_expressions():
+def test_interpreter():
     lexer = Lexer(text)
     parser = Parser(lexer)
     interpreter = Interpreter(parser)
